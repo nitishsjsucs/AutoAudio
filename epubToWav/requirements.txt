@@ -1,3 +1,23 @@
-epub2txt
-python-dotenv
-requests
+# Direct dependencies of epubToCsv.py and csvToWav.py.
+#
+# Versions are pinned to what the (previously committed, now untracked)
+# virtualenv contained, so this reproduces a known-good environment.
+# Built and tested against Python 3.12.
+#
+#   epubToCsv.py : epub2txt
+#   csvToWav.py  : requests, python-dotenv
+#
+# Everything else those scripts use -- csv, json, os, re, sys, pathlib,
+# typing -- is standard library.
+
+epub2txt==0.1.6
+python-dotenv==1.1.1
+requests==2.32.5
+
+# Not listed on purpose:
+#   deepgram-sdk  -- was installed in the old venv but nothing imports it.
+#                    csvToWav.py calls the Deepgram /v1/speak REST endpoint
+#                    directly with `requests`. Add it only if you migrate to
+#                    the official client.
+#   ebooklib, lxml, logzero -- transitive dependencies of epub2txt; pip
+#                    resolves them automatically.

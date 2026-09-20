@@ -1,0 +1,35 @@
+# Dependencies for the Piper TTS fine-tuning scripts in this directory.
+#
+# These are NOT pinned: no working environment for them was ever committed,
+# and the torch/torch-xla versions are dictated by whichever AWS Neuron SDK
+# release is installed on the trn1 instance. Pinning them here from guesswork
+# would be worse than leaving them open. Install the Neuron packages from the
+# AWS index first, then the rest.
+#
+#   prepare_dataset.py      : pandas, librosa
+#   test_dataset_format.py  : pandas
+#   train_piper_trainium.py : torch, torch_xla, pytorch_lightning, piper
+#
+# os, sys, argparse and pathlib are standard library.
+
+# --- Dataset preparation (runs anywhere, no Neuron hardware needed) --------
+pandas
+librosa
+
+# --- Training (AWS Trainium / trn1 only) ----------------------------------
+# torch and torch-xla come from the AWS Neuron pip index, not PyPI:
+#   pip config set global.extra-index-url https://pip.repos.neuron.amazonaws.com
+#   pip install torch-neuronx neuronx-cc
+# which is what provides `import torch_xla`.
+torch
+torch-neuronx
+neuronx-cc
+pytorch-lightning
+
+# --- Piper ----------------------------------------------------------------
+# `from piper.train import ...` needs piper1-gpl installed with its training
+# extra, from source (it builds a Cython extension):
+#   git clone https://github.com/OHF-voice/piper1-gpl.git
+#   cd piper1-gpl && pip install -e .[train] && ./build_monotonic_align.sh
+# See TRAINING.md. It is not installable from PyPI with the train extra, so it
+# is intentionally not listed as a requirement line here.
